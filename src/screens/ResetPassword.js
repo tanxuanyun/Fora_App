@@ -19,26 +19,42 @@ import {
   themeColor,
 } from "react-native-rapi-ui";
 
-const ForgetPassword = ({ navigation }) => {
+import * as Linking from 'expo-linking';
+
+const ResetPassword = ({ navigation }) => {
     const { isDarkmode, setTheme } = useTheme();
-    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
 
-    async function forget() {
+    // async function forget() {
+    //     setLoading(true);
+    //     const { data, error } = await supabase.auth.api.resetPasswordForEmail(
+    //       email
+    //     );
+    //     if (!error) {
+    //       setLoading(false);
+    //       alert("Check your email to reset your password!");
+    //     }
+    //     if (error) {
+    //       setLoading(false);
+    //       alert(error.message);
+    //     }
+    //   }
+
+    async function reset({password}) {
         setLoading(true);
-        const { data, error } = await supabase.auth.api.resetPasswordForEmail(
-          email,
-          { redirectTo: `exp://192.168.1.74:19000/--/reset-password`, }
-        );
+        const { user, error } = await supabase.auth.update({password: password})
+
         if (!error) {
-          setLoading(false);
-          alert("Check your email to reset your password!");
+            setLoading(false);
+            navigation.navigate("Login");
         }
         if (error) {
-          setLoading(false);
-          alert(error.message);
+            setLoading(false);
+            alert(error.message);
         }
-      }
+    }
+
       return (
         <KeyboardAvoidingView behavior="height" enabled style={{ flex: 1 }}>
           <Layout>
@@ -80,55 +96,29 @@ const ForgetPassword = ({ navigation }) => {
                     padding: 30,
                   }}
                 >
-                  Forget Password
+                  Reset Password
                 </Text>
-                <Text>Email</Text>
+                <Text>Password</Text>
                 <TextInput
-                  containerStyle={{ marginTop: 15 }}
-                  placeholder="Enter your email"
-                  value={email}
-                  autoCapitalize="none"
-                  autoCompleteType="off"
-                  autoCorrect={false}
-                  keyboardType="email-address"
-                  onChangeText={(text) => setEmail(text)}
+                containerStyle={{ marginTop: 15 }}
+                placeholder="Enter your password"
+                value={password}
+                autoCapitalize="none"
+                autoCompleteType="off"
+                autoCorrect={false}
+                secureTextEntry={true}
+                onChangeText={(text) => setPassword(text)}
                 />
                 <Button
-                  text={loading ? "Loading" : "Send email"}
+                  text={loading ? "Loading" : "Set password"}
                   onPress={() => {
-                    forget();
+                    reset(password);
                   }}
                   style={{
                     marginTop: 20,
                   }}
                   disabled={loading}
                 />
-    
-                <View
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    marginTop: 15,
-                    justifyContent: "center",
-                  }}
-                >
-                  <Text size="md">Already have an account?</Text>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate("Login");
-                    }}
-                  >
-                    <Text
-                      size="md"
-                      fontWeight="bold"
-                      style={{
-                        marginLeft: 5,
-                      }}
-                    >
-                      Login here
-                    </Text>
-                  </TouchableOpacity>
-                </View>
                 <View
                   style={{
                     flexDirection: "row",
@@ -160,4 +150,4 @@ const ForgetPassword = ({ navigation }) => {
       );
 }
 
-export default ForgetPassword;
+export default ResetPassword;

@@ -1,5 +1,6 @@
 {
   "expo": {
+    "scheme": "fora",
     "name": "Fora",
     "slug": "fora",
     "version": "1.0.0",

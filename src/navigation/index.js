@@ -7,11 +7,11 @@ import Main from './MainStack';
 import Auth from './AuthStack';
 import Loading from '../screens/Loading';
 
-const Navigation = () => {
+const Navigation = ({linking}) => {
 	const auth = useContext(AuthContext);
 	const user = auth.user;
 	return (
-		<NavigationContainer>
+		<NavigationContainer linking = {linking}>
 			{user == null && <Loading />}
 			{user == false && <Auth />}
 			{user == true && <Main />}
