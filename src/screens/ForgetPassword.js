@@ -27,8 +27,7 @@ const ForgetPassword = ({ navigation }) => {
     async function forget() {
         setLoading(true);
         const { data, error } = await supabase.auth.api.resetPasswordForEmail(
-          email,
-          { redirectTo: `exp://192.168.1.74:19000/--/reset-password`, }
+          email
         );
         if (!error) {
           setLoading(false);
